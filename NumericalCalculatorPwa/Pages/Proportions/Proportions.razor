@@ -1,0 +1,116 @@
+﻿@page "/proportions"
+@using NumericalCalculatorPwa.Extensions;
+
+<h1>Proportions</h1>
+
+<GeneralError ErrorMessage="@generalErrorMessage"></GeneralError>
+
+<InfoBar>Put "x" into only one of the fields.</InfoBar>
+
+<div class="ProportionsPage">
+    <div class="form-group">
+        <div class="form-row">
+            @foreach (var item in proportionInputs)
+            {
+                <div class="col-6">
+                    <input type="text" class="form-control @(string.IsNullOrWhiteSpace(item.ErrorMessage) ? "" : "is-invalid")" placeholder="Value" @bind="item.Value" @bind:event="oninput" @onchange="Validate">
+                    @if (!string.IsNullOrWhiteSpace(item.ErrorMessage))
+                    {
+                        <div class="invalid-feedback">
+                            @item.ErrorMessage
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-8">
+            <input type="text" class="form-control" @bind="result">
+        </div>
+        <div class="col-4">
+            <button class="btn btn-primary" @onclick="Calculate">Calculate</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    ValueErrorModel[] proportionInputs = new ValueErrorModel[4].Populate();
+
+    string generalErrorMessage = string.Empty;
+    bool isValidationEnabled = false;
+    double result = 0;
+
+    public void Calculate()
+    {
+        try
+        {
+            isValidationEnabled = true;
+
+            if (!IsModelValid())
+                return;
+
+            var values = GetValues();
+
+            var proportions = new Rychusoft.NumericalLibraries.Calculator.Proportions();
+            result = proportions.Compute(values[0], values[1], values[2], values[3]);
+        }
+        catch (Exception ex)
+        {
+            generalErrorMessage = ex.Message;
+        }
+    }
+
+    public void Validate()
+    {
+        if (!isValidationEnabled)
+            return;
+
+        generalErrorMessage = string.Empty;
+
+        var unknownFieldIndex = -1;
+
+        for (int i = 0; i < 4; i++)
+        {
+            proportionInputs[i].ErrorMessage = string.Empty;
+
+            if (IsProportionsUnknownValue(proportionInputs[i].Value))
+            {
+                if (unknownFieldIndex >= 0)
+                    proportionInputs[i].ErrorMessage = proportionInputs[unknownFieldIndex].ErrorMessage = "Only one unknown field is allowed";
+                else
+                    unknownFieldIndex = i;
+            }
+            else if (!double.TryParse(proportionInputs[i].Value, out _))
+            {
+                proportionInputs[i].ErrorMessage = "Invalid value";
+            }
+        }
+
+        if (unknownFieldIndex < 0)
+            generalErrorMessage = "Unknown variable is missing. Put 'x' into one of the fields or leave one of them empty.";
+    }
+
+    private bool IsProportionsUnknownValue(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) || value == "x";
+    }
+
+    public bool IsModelValid()
+    {
+        Validate();
+
+        return proportionInputs.All(pi => string.IsNullOrWhiteSpace(pi.ErrorMessage))
+            && string.IsNullOrWhiteSpace(generalErrorMessage);
+    }
+
+    private double[] GetValues()
+    {
+        return proportionInputs.Select(pi => ConvertToProportionsDouble(pi.Value)).ToArray();
+    }
+
+    private double ConvertToProportionsDouble(string value)
+    {
+        return IsProportionsUnknownValue(value) ? double.NaN : Convert.ToDouble(value);
+    }
+}

@@ -7,10 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\bundle.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\scss_output\site.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview3.20168.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0-preview3.20168.3" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0-preview3.20168.3" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview3.20168.3" />
+    <PackageReference Include="Rychusoft.NumericalLibraries.Calculator" Version="1.1.0" />
   </ItemGroup>
   <!-- When publishing, swap service-worker.published.js in place of service-worker.js -->
   <ItemGroup Condition="'$(DesignTimeBuild)' != 'true'">
@@ -18,7 +28,14 @@
     <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Pages\Calculator\" />
+    <Folder Include="Pages\InterpolationApproximation\" />
+    <Folder Include="Pages\LinearEquations\" />
+    <Folder Include="Pages\Mean\" />
     <Folder Include="wwwroot\css\fonts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/bundle.css",
+    "inputFile": "wwwroot/css/bundle.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/scss_output/site.css",
+    "inputFile": "wwwroot/css/site.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/scss_output/GeneralError.razor.css",
+    "inputFile": "Shared/Components/GeneralError.razor.scss"
+  }
+]

@@ -1,0 +1,22 @@
+﻿
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <div class="GeneralErrorComponentRoot">
+        <div class="alert alert-warning" role="alert">
+            <span class="oi oi-warning" aria-hidden="true"></span> @ErrorMessage
+            <button type="button" class="close" aria-label="Close" @onclick="Dismiss">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    public void Dismiss()
+    {
+        ErrorMessage = string.Empty;
+    }
+}
