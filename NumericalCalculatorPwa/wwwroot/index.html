@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Numerical Calculator</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+</head>
+<body id="body">
+    <header id="header">
+        <nav id="siteHeader" class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container">
+                <a href="https://pawelrychlicki.pl" class="MainLink navbar-brand">
+                    <img src="icon-512.png" alt="Rychu's Site" />
+                </a>
+
+                <button id="mainMenuContainerCollapseButton" class="navbar-toggler" type="button" aria-controls="menuContainer" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div id="mainMenuContainer" class="collapse navbar-collapse">
+                    <ul id="menu" class="Menu navbar-nav">
+                        <li class="MenuElement nav-item">
+                            <a href="https://pawelrychlicki.pl" class="nav-link">Blog</a>
+                        </li>
+                        <li class="MenuElement nav-item">
+                            <a href="https://pawelrychlicki.pl/Application" class="nav-link">Applications</a>
+                        </li>
+                        <li class="MenuElement nav-item">
+                            <a href="https://pawelrychlicki.pl/Article" class="nav-link">Articles</a>
+                        </li>
+                        <li class="MenuElement nav-item active">
+                            <a href="https://pawelrychlicki.pl/NumericalCalculator" class="nav-link">Numerical Calculator</a>
+                        </li>
+                        <li class="MenuElement nav-item">
+                            <a href="https://pawelrychlicki.pl/home/contact" class="nav-link">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!--<div id="pageHeader" class="PageHeader">
+            <div class="container">
+                <h1 class="pageHeader-title">Numerical Calculator</h1>
+            </div>
+        </div>-->
+    </header>
+
+    <main id="main" class="page container">
+        <app>Loading...</app>
+    </main>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <footer id="pageFooter" class="PageFooter">
+        <p>© 2012 - 2020 <a href="https://pawelrychlicki.pl/home/contact">Paweł Rychlicki</a></p>
+        <p>
+            <a href="#">Back to top</a>
+        </p>
+    </footer>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script>
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+        if (isStandalone) {
+            document.getElementById("body").classList.add("standalone-mode");
+            document.getElementById("main").classList.remove("container");
+        }
+    </script>
+    <script>
+        document.getElementById("mainMenuContainerCollapseButton").addEventListener("click", () => {
+            document.getElementById("mainMenuContainer").classList.toggle("collapse");
+        });
+    </script>
+</body>
+
+</html>
