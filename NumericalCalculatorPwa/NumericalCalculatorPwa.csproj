@@ -28,10 +28,6 @@
     <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\Calculator\" />
-    <Folder Include="Pages\InterpolationApproximation\" />
-    <Folder Include="Pages\LinearEquations\" />
-    <Folder Include="Pages\Mean\" />
     <Folder Include="wwwroot\css\fonts\" />
   </ItemGroup>
   <ItemGroup>
