@@ -1,5 +1,6 @@
 ﻿@page "/proportions"
 @using NumericalCalculatorPwa.Extensions;
+@using NumericalCalculatorPwa.Pages.Proportions.Components;
 
 <h1>Proportions</h1>
 
@@ -13,13 +14,7 @@
             @foreach (var item in proportionInputs)
             {
                 <div class="col-6">
-                    <input type="text" class="form-control @(string.IsNullOrWhiteSpace(item.ErrorMessage) ? "" : "is-invalid")" placeholder="Value" @bind="item.Value" @bind:event="oninput" @onchange="Validate">
-                    @if (!string.IsNullOrWhiteSpace(item.ErrorMessage))
-                    {
-                        <div class="invalid-feedback">
-                            @item.ErrorMessage
-                        </div>
-                    }
+                    <InputWithValidation Model="item" OnChangeCallback="Validate"></InputWithValidation>
                 </div>
             }
         </div>
