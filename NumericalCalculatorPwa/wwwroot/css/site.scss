@@ -17,6 +17,17 @@ html, body {
     }
 }
 
+/* Bootstrap overwrites
+-----------------------------------------------------------*/
+
+label {
+    margin-bottom: 0.25rem;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.75rem;
+}
+
 /* Site header
 -----------------------------------------------------------*/
 .standalone-mode header {
@@ -54,13 +65,14 @@ html, body {
 ---------------------------------------------------------*/
 
 .PageFooter {
-    padding: 2.5rem 0;
+    padding: 1.2rem 0;
     color: #999;
     background-color: #f9f9f9;
     text-align: center;
-    border-top: .05rem solid #e5e5e5;
-    border-bottom: .05rem solid #e5e5e5;
+    border-top: .02rem solid #e5e5e5;
+    border-bottom: .02rem solid #e5e5e5;
     flex: 0 1;
+    font-size: 0.8rem;
 }
 
 app {
@@ -162,7 +174,7 @@ app {
     .sidebar {
         position: sticky;
         top: 0;
-        width: 370px;
+        flex: 0 0 370px;
     }
 
     main > div {

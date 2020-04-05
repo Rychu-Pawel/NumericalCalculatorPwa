@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/css/scss_output/GeneralError.razor.css",
     "inputFile": "Shared/Components/GeneralError.razor.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/scss_output/InfoBar.razor.css",
+    "inputFile": "Shared/Components/InfoBar.razor.scss"
   }
 ]

@@ -8,22 +8,23 @@
 
 <InfoBar>Put "x" into only one of the fields.</InfoBar>
 
-<div class="ProportionsPage">
+<div class="ProportionsPage" @onkeypress="HandleProportionsPageKeyPress">
     <div class="form-group">
         <div class="form-row">
             @foreach (var item in proportionInputs)
             {
-                <div class="col-6">
+                <div class="form-group col-6 mb-2">
                     <InputWithValidation Model="item" OnChangeCallback="Validate"></InputWithValidation>
                 </div>
             }
         </div>
     </div>
     <div class="form-row">
-        <div class="col-8">
-            <input type="text" class="form-control" @bind="result">
+        <div class="form-group col-8">
+            <label for="proportionsResult">Result:</label>
+            <input id="proportionsResult" type="text" class="form-control" @bind="result">
         </div>
-        <div class="col-4">
+        <div class="form-group col-4 d-flex align-items-end">
             <button class="btn btn-primary" @onclick="Calculate">Calculate</button>
         </div>
     </div>
@@ -35,6 +36,12 @@
     string generalErrorMessage = string.Empty;
     bool isValidationEnabled = false;
     double result = 0;
+
+    public void HandleProportionsPageKeyPress(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+            Calculate();
+    }
 
     public void Calculate()
     {
