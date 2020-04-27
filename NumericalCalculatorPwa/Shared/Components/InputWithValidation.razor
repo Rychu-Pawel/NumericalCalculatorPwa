@@ -1,4 +1,4 @@
-﻿<input type="text" class="form-control @(string.IsNullOrWhiteSpace(Model.ErrorMessage) ? "" : "is-invalid")" placeholder="Value" @bind="Model.Value" @bind:event="oninput" @onchange="OnChangeCallback">
+﻿<input type="text" inputmode="decimal" class="form-control @(string.IsNullOrWhiteSpace(Model.ErrorMessage) ? "" : "is-invalid")" placeholder="Value" @bind="Model.Value" @bind:event="oninput" @onchange="OnChangeCallback">
 @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
 {
     <div class="invalid-feedback">

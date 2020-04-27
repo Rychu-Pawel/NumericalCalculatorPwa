@@ -1,6 +1,131 @@
 ﻿@page "/mean"
 
+@using NumericalCalculatorPwa.Extensions;
+@using NumericalCalculatorPwa.Pages.Mean.ViewModels;
+
 <h1>Mean</h1>
 
+<GeneralError ErrorMessage="@generalErrorMessage"></GeneralError>
+
+<div class="MeanPage" @onkeypress="HandlePageKeyPress">
+    <div class="form-group row align-items-center">
+        <label class="col-12 col-md-4 col-lg-12 col-xl-4 col-form-label">Mean type</label>
+        <div class="col-6 col-md-4 col-lg-6 col-xl-4">
+            <RadioButton Id="rbArithmetic" Value="@isArithmetic" Text="Arithmetic" GroupName="rbMeanTypeGroup"></RadioButton>
+        </div>
+        <div class="col-6 col-md-4 col-lg-6 col-xl-4">
+            <RadioButton Id="rbWeighted" Value="@isWeighted" Text="Weighted" GroupName="rbMeanTypeGroup"></RadioButton>
+        </div>
+    </div>
+    <div class="form-group">
+        @foreach (var item in valueInputs)
+        {
+            <div class="row mb-2">
+                <div class="form-group col">
+                    <InputWithValidation Model="item.Value" OnChangeCallback="Validate"></InputWithValidation>
+                </div>
+                <div class="form-group col @(isWeighted ? string.Empty : "d-none")">
+                    <InputWithValidation Model="item.Weight" OnChangeCallback="Validate"></InputWithValidation>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="form-row">
+        <div class="form-group col-8 col-sm-9 col-lg-8">
+            <label for="txtResult">Result:</label>
+            <input id="txtResult" type="text" class="form-control" @bind="result">
+        </div>
+        <div class="form-group col-4 col-sm-3 col-lg-4 d-flex align-items-end justify-content-end">
+            <button class="btn btn-primary" @onclick="Calculate">Calculate</button>
+        </div>
+    </div>
+</div>
+
 @code {
+    MeanViewModel[] valueInputs = new MeanViewModel[1].Populate();
+
+    string generalErrorMessage = string.Empty;
+    bool isValidationEnabled = false;
+    bool isArithmetic = true;
+    bool isWeighted = false;
+    double result = 0;
+
+    public void HandlePageKeyPress(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+            Calculate();
+    }
+
+    public void Calculate()
+    {
+        try
+        {
+            isValidationEnabled = true;
+
+            //if (!IsModelValid())
+            //    return;
+
+            //var values = GetValues();
+
+            //var proportions = new Rychusoft.NumericalLibraries.Calculator.Proportions();
+            //result = proportions.Compute(values[0], values[1], values[2], values[3]);
+        }
+        catch (Exception ex)
+        {
+            generalErrorMessage = ex.Message;
+        }
+    }
+
+    public void Validate()
+    {
+        //if (!isValidationEnabled)
+        //    return;
+
+        //generalErrorMessage = string.Empty;
+
+        //var unknownFieldIndex = -1;
+
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    valueInputs[i].ErrorMessage = string.Empty;
+
+        //    if (IsProportionsUnknownValue(valueInputs[i].Value))
+        //    {
+        //        if (unknownFieldIndex >= 0)
+        //            valueInputs[i].ErrorMessage = valueInputs[unknownFieldIndex].ErrorMessage = "Only one unknown field is allowed";
+        //        else
+        //            unknownFieldIndex = i;
+        //    }
+        //    else if (!double.TryParse(valueInputs[i].Value, out _))
+        //    {
+        //        valueInputs[i].ErrorMessage = "Invalid value";
+        //    }
+        //}
+
+        //if (unknownFieldIndex < 0)
+        //    generalErrorMessage = "Unknown variable is missing. Put 'x' into one of the fields or leave one of them empty.";
+    }
+
+    //private bool IsProportionsUnknownValue(string value)
+    //{
+    //    return string.IsNullOrWhiteSpace(value) || value == "x";
+    //}
+
+    //public bool IsModelValid()
+    //{
+    //    Validate();
+
+    //    return valueInputs.All(pi => string.IsNullOrWhiteSpace(pi.ErrorMessage))
+    //        && string.IsNullOrWhiteSpace(generalErrorMessage);
+    //}
+
+    //private double[] GetValues()
+    //{
+    //    return valueInputs.Select(pi => ConvertToProportionsDouble(pi.Value)).ToArray();
+    //}
+
+    //private double ConvertToProportionsDouble(string value)
+    //{
+    //    return IsProportionsUnknownValue(value) ? double.NaN : Convert.ToDouble(value);
+    //}
 }
