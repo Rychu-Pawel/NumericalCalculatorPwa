@@ -340,3 +340,4 @@ ASALocalRun/
 healthchecksdb
 
 *.css
+/NumericalCalculatorPwa/wwwroot/scripts/bundle.js

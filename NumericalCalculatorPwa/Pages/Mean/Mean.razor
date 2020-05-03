@@ -11,10 +11,21 @@
     <div class="form-group row align-items-center">
         <label class="col-12 col-md-4 col-lg-12 col-xl-4 col-form-label">Mean type</label>
         <div class="col-6 col-md-4 col-lg-6 col-xl-4">
-            <RadioButton Id="rbArithmetic" Value="@isArithmetic" Text="Arithmetic" GroupName="rbMeanTypeGroup"></RadioButton>
+            <RadioButton 
+                         Id="rbArithmetic"
+                         Text="Arithmetic"
+                         GroupName="rbMeanTypeGroup"
+                         Checked="true"
+                         OnChangeCallback="(() => { computationType = ComputationType.Arithemtic; })">
+            </RadioButton>
         </div>
         <div class="col-6 col-md-4 col-lg-6 col-xl-4">
-            <RadioButton Id="rbWeighted" Value="@isWeighted" Text="Weighted" GroupName="rbMeanTypeGroup"></RadioButton>
+            <RadioButton 
+                         Id="rbWeighted" 
+                         Text="Weighted" 
+                         GroupName="rbMeanTypeGroup"
+                         OnChangeCallback="(() => { computationType = ComputationType.Weighted; })">
+            </RadioButton>
         </div>
     </div>
     <div class="form-group">
@@ -24,7 +35,7 @@
                 <div class="form-group col">
                     <InputWithValidation Model="item.Value" OnChangeCallback="Validate"></InputWithValidation>
                 </div>
-                <div class="form-group col @(isWeighted ? string.Empty : "d-none")">
+                <div class="form-group col @(computationType == ComputationType.Weighted ? string.Empty : "d-none")">
                     <InputWithValidation Model="item.Weight" OnChangeCallback="Validate"></InputWithValidation>
                 </div>
             </div>
@@ -46,9 +57,10 @@
 
     string generalErrorMessage = string.Empty;
     bool isValidationEnabled = false;
-    bool isArithmetic = true;
-    bool isWeighted = false;
     double result = 0;
+
+    enum ComputationType { Arithemtic, Weighted }
+    ComputationType computationType = ComputationType.Arithemtic;
 
     public void HandlePageKeyPress(KeyboardEventArgs eventArgs)
     {

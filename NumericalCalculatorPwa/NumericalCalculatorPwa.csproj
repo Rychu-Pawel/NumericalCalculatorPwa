@@ -19,6 +19,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-rc1.20223.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0-rc1.20223.4" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0-rc1.20223.4" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.8.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Rychusoft.NumericalLibraries.Calculator" Version="1.1.0" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0-preview.3.20214.6" />
   </ItemGroup>
@@ -29,9 +33,25 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\css\fonts\" />
+    <Folder Include="wwwroot\scripts\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="compilerconfig.json" />
   </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile>wwwroot\scripts\bundle.js</TypeScriptOutFile>
+    <TypeScriptOutDir></TypeScriptOutDir>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
 
 </Project>
