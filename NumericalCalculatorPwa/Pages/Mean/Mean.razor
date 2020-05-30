@@ -77,13 +77,21 @@
         {
             isValidationEnabled = true;
 
-            //if (!IsModelValid())
-            //    return;
+            if (!IsModelValid())
+                return;
 
-            //var values = GetValues();
+            var mean = new Rychusoft.NumericalLibraries.Calculator.Mean();
 
-            //var proportions = new Rychusoft.NumericalLibraries.Calculator.Proportions();
-            //result = proportions.Compute(values[0], values[1], values[2], values[3]);
+            if (computationType == ComputationType.Arithemtic)
+            {
+                var values = GetArithemticValues();
+                result = mean.ComputeArithmetic(values);
+            }
+            else
+            {
+                var values = GetWeightedValues();
+                result = mean.ComputeWeighted(values);
+            }
         }
         catch (Exception ex)
         {
@@ -114,56 +122,60 @@
         return string.IsNullOrEmpty(row.Value.Value) && string.IsNullOrEmpty(row.Weight.Value);
     }
 
-    public void Validate()
+    public bool IsModelValid()
     {
-        //if (!isValidationEnabled)
-        //    return;
+        Validate();
 
-        //generalErrorMessage = string.Empty;
-
-        //var unknownFieldIndex = -1;
-
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    valueInputs[i].ErrorMessage = string.Empty;
-
-        //    if (IsProportionsUnknownValue(valueInputs[i].Value))
-        //    {
-        //        if (unknownFieldIndex >= 0)
-        //            valueInputs[i].ErrorMessage = valueInputs[unknownFieldIndex].ErrorMessage = "Only one unknown field is allowed";
-        //        else
-        //            unknownFieldIndex = i;
-        //    }
-        //    else if (!double.TryParse(valueInputs[i].Value, out _))
-        //    {
-        //        valueInputs[i].ErrorMessage = "Invalid value";
-        //    }
-        //}
-
-        //if (unknownFieldIndex < 0)
-        //    generalErrorMessage = "Unknown variable is missing. Put 'x' into one of the fields or leave one of them empty.";
+        return valueInputs.All(pi => string.IsNullOrWhiteSpace(pi.Value.ErrorMessage) && string.IsNullOrWhiteSpace(pi.Weight.ErrorMessage))
+            && string.IsNullOrWhiteSpace(generalErrorMessage);
     }
 
-    //private bool IsProportionsUnknownValue(string value)
-    //{
-    //    return string.IsNullOrWhiteSpace(value) || value == "x";
-    //}
+    public void Validate()
+    {
+        if (!isValidationEnabled)
+            return;
 
-    //public bool IsModelValid()
-    //{
-    //    Validate();
+        generalErrorMessage = string.Empty;
 
-    //    return valueInputs.All(pi => string.IsNullOrWhiteSpace(pi.ErrorMessage))
-    //        && string.IsNullOrWhiteSpace(generalErrorMessage);
-    //}
+        if (valueInputs.Count == 1)
+            ValidateRow(valueInputs[0]);
 
-    //private double[] GetValues()
-    //{
-    //    return valueInputs.Select(pi => ConvertToProportionsDouble(pi.Value)).ToArray();
-    //}
+        for (var i = 0; i < valueInputs.Count - 1; i++)
+            ValidateRow(valueInputs[i]);
+    }
 
-    //private double ConvertToProportionsDouble(string value)
-    //{
-    //    return IsProportionsUnknownValue(value) ? double.NaN : Convert.ToDouble(value);
-    //}
+    private void ValidateRow(MeanViewModel row)
+    {
+        row.Value.ErrorMessage = string.Empty;
+        row.Weight.ErrorMessage = string.Empty;
+
+        if (!IsValidDouble(row.Value.Value))
+            row.Value.ErrorMessage = "Invalid value";
+
+        if (computationType == ComputationType.Weighted && !IsValidDouble(row.Weight.Value))
+            row.Weight.ErrorMessage = "Invalid value";
+    }
+
+    private bool IsValidDouble(string value)
+    {
+        return double.TryParse(value, out _);
+    }
+
+    private IEnumerable<double> GetArithemticValues()
+    {
+        return valueInputs
+            .SkipLast(1)
+            .Select(v => Convert.ToDouble(v.Value.Value));
+    }
+
+    private IEnumerable<double[]> GetWeightedValues()
+    {
+        return valueInputs
+            .SkipLast(1)
+            .Select(v => new double[] 
+            { 
+                Convert.ToDouble(v.Value.Value), 
+                Convert.ToDouble(v.Weight.Value)
+            });
+    }
 }
