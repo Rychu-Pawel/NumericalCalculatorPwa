@@ -1,6 +1,5 @@
 ﻿@page "/mean"
 
-@using NumericalCalculatorPwa.Extensions;
 @using NumericalCalculatorPwa.Pages.Mean.ViewModels;
 
 <h1>Mean</h1>
@@ -31,10 +30,10 @@
         {
             <div class="row mb-2">
                 <div class="form-group col">
-                    <InputWithValidation Model="item.Value" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
+                    <InputWithValidation Model="item.Value" Placeholder="Value" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
                 </div>
                 <div class="form-group col @(computationType == ComputationType.Weighted ? string.Empty : "d-none")">
-                    <InputWithValidation Model="item.Weight" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
+                    <InputWithValidation Model="item.Weight" Placeholder="Weight" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
                 </div>
                 <div class="col-1 @(valueInputs.Count > 1 ? string.Empty : "d-none")">
                     <button class="btn btn-link @(IsLastRow(item) ? "d-none" : string.Empty)" @onclick="(() => RemoveRow(item))">
@@ -92,6 +91,8 @@
                 var values = GetWeightedValues();
                 result = mean.ComputeWeighted(values);
             }
+
+            isValidationEnabled = false;
         }
         catch (Exception ex)
         {
@@ -172,9 +173,9 @@
     {
         return valueInputs
             .SkipLast(1)
-            .Select(v => new double[] 
-            { 
-                Convert.ToDouble(v.Value.Value), 
+            .Select(v => new double[]
+            {
+                Convert.ToDouble(v.Value.Value),
                 Convert.ToDouble(v.Weight.Value)
             });
     }

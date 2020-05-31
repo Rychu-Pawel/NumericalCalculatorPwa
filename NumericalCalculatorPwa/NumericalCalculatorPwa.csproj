@@ -23,7 +23,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Rychusoft.NumericalLibraries.Calculator" Version="1.1.0" />
+    <PackageReference Include="Rychusoft.NumericalLibraries.Calculator" Version="1.1.1" />
+    <PackageReference Include="Rychusoft.NumericalLibraries.Interpolation" Version="1.1.1" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0-preview.3.20214.6" />
   </ItemGroup>
   <!-- When publishing, swap service-worker.published.js in place of service-worker.js -->

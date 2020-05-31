@@ -1,6 +1,176 @@
 ﻿@page "/interpolationapproximation"
 
+@using NumericalCalculatorPwa.Pages.InterpolationApproximation.ViewModels;
+
 <h1>Interpolation and approximation</h1>
 
+<GeneralError ErrorMessage="@generalErrorMessage"></GeneralError>
+
+<div class="InterpolationAndApproximationPage" @onkeypress="HandlePageKeyPress">
+    <div class="form-group row align-items-center">
+        <label class="col-12 col-md-4 col-lg-12 col-xl-4 col-form-label">Type</label>
+        <div class="col-6 col-md-4 col-lg-6 col-xl-4">
+            <RadioButton Id="rbInterpolation"
+                         Text="Interpolation"
+                         GroupName="rbTypeGroup"
+                         Checked="true"
+                         OnChangeCallback="(() => { computationType = ComputationType.Interpolation; })">
+            </RadioButton>
+        </div>
+        <div class="col-6 col-md-4 col-lg-6 col-xl-4">
+            <RadioButton Id="rbApproximation"
+                         Text="Approximation"
+                         GroupName="rbTypeGroup"
+                         OnChangeCallback="(() => { computationType = ComputationType.Approximation; })">
+            </RadioButton>
+        </div>
+        <InputWithValidation Model="level" Placeholder="Level" OnChangeCallback="Validate"></InputWithValidation>
+    </div>
+    <div class="form-group">
+        @foreach (var item in valueInputs)
+        {
+            <div class="row mb-2">
+                <div class="form-group col">
+                    <InputWithValidation Model="item.X" Placeholder="X" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
+                </div>
+                <div class="form-group col">
+                    <InputWithValidation Model="item.Y" Placeholder="Y" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
+                </div>
+                <div class="col-1 @(valueInputs.Count > 1 ? string.Empty : "d-none")">
+                    <button class="btn btn-link @(IsLastRow(item) ? "d-none" : string.Empty)" @onclick="(() => RemoveRow(item))">
+                        <span class="oi oi-trash" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="form-row">
+        <div class="form-group col-8 col-sm-9 col-lg-8">
+            <label for="txtResult">Result:</label>
+            <input id="txtResult" type="text" class="form-control" @bind="result">
+        </div>
+        <div class="form-group col-4 col-sm-3 col-lg-4 d-flex align-items-end justify-content-end">
+            <button class="btn btn-primary" @onclick="Calculate">Calculate</button>
+        </div>
+    </div>
+</div>
+
 @code {
+    List<InterpolationApproximationViewModel> valueInputs = new List<InterpolationApproximationViewModel> { new InterpolationApproximationViewModel() };
+
+    string generalErrorMessage = string.Empty;
+    bool isValidationEnabled = false;
+
+    ValueErrorModel level = new ValueErrorModel() { Value = "2" };
+    string result = string.Empty;
+
+    enum ComputationType { Interpolation, Approximation }
+    ComputationType computationType = ComputationType.Interpolation;
+
+    public void HandlePageKeyPress(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+            Calculate();
+    }
+
+    public void Calculate()
+    {
+        try
+        {
+            isValidationEnabled = true;
+
+            if (!IsModelValid())
+                return;
+
+            var values = GetValues();
+
+            if (computationType == ComputationType.Interpolation)
+            {
+                var interpolation = new Rychusoft.NumericalLibraries.Interpolation.Interpolation(values);
+                result = interpolation.Compute();
+            }
+            else
+            {
+                var level = Convert.ToInt32(this.level.Value);
+                var approximation = new Rychusoft.NumericalLibraries.Approximation.Approximation(values, level);
+                result = approximation.Compute();
+            }
+
+            isValidationEnabled = false;
+        }
+        catch (Exception ex)
+        {
+            generalErrorMessage = ex.Message;
+        }
+    }
+
+    public bool IsLastRow(InterpolationApproximationViewModel row)
+    {
+        return row == valueInputs.Last();
+    }
+
+    public void RemoveRow(InterpolationApproximationViewModel row)
+    {
+        valueInputs.Remove(row);
+    }
+
+    private void ManageRowsCount()
+    {
+        var lastRow = valueInputs.Last();
+
+        if (!IsRowEmpty(lastRow))
+            valueInputs.Add(new InterpolationApproximationViewModel());
+    }
+
+    private bool IsRowEmpty(InterpolationApproximationViewModel row)
+    {
+        return string.IsNullOrEmpty(row.X.Value) && string.IsNullOrEmpty(row.Y.Value);
+    }
+
+    public bool IsModelValid()
+    {
+        Validate();
+
+        return valueInputs.All(pi => string.IsNullOrWhiteSpace(pi.X.ErrorMessage) && string.IsNullOrWhiteSpace(pi.Y.ErrorMessage))
+            && string.IsNullOrWhiteSpace(generalErrorMessage);
+    }
+
+    public void Validate()
+    {
+        if (!isValidationEnabled)
+            return;
+
+        generalErrorMessage = string.Empty;
+
+        if (valueInputs.Count == 1)
+            ValidateRow(valueInputs[0]);
+
+        for (var i = 0; i < valueInputs.Count - 1; i++)
+            ValidateRow(valueInputs[i]);
+    }
+
+    private void ValidateRow(InterpolationApproximationViewModel row)
+    {
+        row.X.ErrorMessage = string.Empty;
+        row.Y.ErrorMessage = string.Empty;
+
+        if (!IsValidDouble(row.X.Value))
+            row.X.ErrorMessage = "Invalid value";
+
+        if (!IsValidDouble(row.Y.Value))
+            row.Y.ErrorMessage = "Invalid value";
+    }
+
+    private bool IsValidDouble(string value)
+    {
+        return double.TryParse(value, out _);
+    }
+
+    private List<Rychusoft.NumericalLibraries.Common.PointD> GetValues()
+    {
+        return valueInputs
+            .SkipLast(1)
+            .Select(v => new Rychusoft.NumericalLibraries.Common.PointD(Convert.ToDouble(v.X.Value), Convert.ToDouble(v.Y.Value)))
+            .ToList();
+    }
 }
