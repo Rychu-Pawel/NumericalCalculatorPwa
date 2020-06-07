@@ -1,4 +1,4 @@
-﻿<input type="text" 
+﻿<input type="@Type" 
        inputmode="decimal" 
        class="form-control @(Class) @(string.IsNullOrWhiteSpace(Model.ErrorMessage) ? "" : "is-invalid")" 
        placeholder="@Placeholder" 
@@ -22,7 +22,10 @@
     public string Placeholder { get; set; } = "Value";
 
     [Parameter]
-    public string Class { get; set; }
+    public string Class { get; set; } = "";
+
+    [Parameter]
+    public string Type { get; set; } = "text";
 
     [Parameter]
     public EventCallback<ChangeEventArgs> OnChangeCallback { get; set; }

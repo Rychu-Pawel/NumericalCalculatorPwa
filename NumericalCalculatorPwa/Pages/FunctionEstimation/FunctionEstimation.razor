@@ -26,7 +26,7 @@
         </div>
         <label class="col-auto justify-content-end @(computationType == ComputationType.Approximation ? string.Empty : "d-none")">Level</label>
         <div class="col-2 @(computationType == ComputationType.Approximation ? string.Empty : "d-none")">
-            <InputWithValidation Model="level" Placeholder="Level" OnChangeCallback="Validate" Class="w-100"></InputWithValidation>
+            <InputWithValidation Model="level" Placeholder="Level" OnChangeCallback="Validate" Class="w-100" Type="number"></InputWithValidation>
         </div>
     </div>
     <div class="form-group mt-4 mb-2">
