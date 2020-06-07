@@ -1,6 +1,162 @@
 ﻿@page "/linearequations"
 
+@using NumericalCalculatorPwa.Extensions;
+
 <h1>Linear equations</h1>
 
+<GeneralError ErrorMessage="@generalErrorMessage"></GeneralError>
+
+<div class="LinearEquationsPage mt-4" @onkeypress="HandlePageKeyPress">
+    <div class="form-group">
+        <label>Variables count:</label>
+        <InputWithValidation Model="variablesCount" OnChangeCallback="Validate" Type="number" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                @for (int i = 0; i < valueInputRows.Count; i++)
+                {
+                    <th scope="col">x@(i)</th>
+                }
+                <th></th>
+                <th>r</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < valueInputRows.Count; i++)
+            {
+                <tr>
+                    @for (int j = 0; j < valueInputRows.Count; j++)
+                    {
+                        <td>
+                            <InputWithValidation Model="valueInputRows[i][j]" OnChangeCallback="Validate"></InputWithValidation>
+                        </td>
+                    }
+                    <td>=</td>
+                    <td>valueInputRows[i][valueInputRows.Count]</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="form-row">
+        <div class="form-group col-8 col-sm-9 col-lg-8">
+            <label for="txtResult">Result:</label>
+            <input id="txtResult" type="text" class="form-control" @bind="results">
+        </div>
+        <div class="form-group col-4 col-sm-3 col-lg-4 d-flex align-items-end justify-content-end">
+            <button class="btn btn-primary" @onclick="Calculate">Calculate</button>
+        </div>
+    </div>
+</div>
+
 @code {
+    static int initialVariablesCount = 2;
+
+    List<List<ValueErrorModel>> valueInputRows = new List<List<ValueErrorModel>>
+    {
+        new List<ValueErrorModel>(initialVariablesCount + 1).Populate(),
+        new List<ValueErrorModel>(initialVariablesCount + 1).Populate()
+    };
+
+    string generalErrorMessage = string.Empty;
+    bool isValidationEnabled = false;
+
+    ValueErrorModel variablesCount = new ValueErrorModel() { Value = initialVariablesCount.ToString() };
+    List<double> results = new List<double>(initialVariablesCount);
+
+    public void HandlePageKeyPress(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+            Calculate();
+    }
+
+    public void Calculate()
+    {
+        try
+        {
+            isValidationEnabled = true;
+
+            if (!IsModelValid())
+                return;
+
+            var values = GetValues();
+
+            var linearEquations = new Rychusoft.NumericalLibraries.LinearEquation.LinearEquation(values);
+            results = linearEquations.Compute().ToList();
+
+            isValidationEnabled = false;
+        }
+        catch (Exception ex)
+        {
+            generalErrorMessage = ex.Message;
+        }
+    }
+
+    private void ManageRowsCount()
+    {
+        Validate();
+
+        if (!string.IsNullOrWhiteSpace(variablesCount.ErrorMessage))
+            return;
+
+
+    }
+
+    public bool IsModelValid()
+    {
+        Validate();
+
+        return valueInputRows.SelectMany(r => r).All(v => string.IsNullOrWhiteSpace(v.ErrorMessage))
+            && string.IsNullOrWhiteSpace(generalErrorMessage) && string.IsNullOrWhiteSpace(variablesCount.ErrorMessage);
+    }
+
+    public void Validate()
+    {
+        variablesCount.ErrorMessage = string.Empty;
+
+        if (!IsValidInt(variablesCount.Value))
+            variablesCount.ErrorMessage = "Invalid value";
+
+        if (!isValidationEnabled)
+            return;
+
+        generalErrorMessage = string.Empty;
+
+        foreach (var row in valueInputRows)
+            ValidateRow(row);
+    }
+
+    private void ValidateRow(List<ValueErrorModel> row)
+    {
+        foreach (var item in row)
+        {
+            item.ErrorMessage = string.Empty;
+
+            if (!IsValidDouble(item.Value))
+                item.ErrorMessage = "Invalid value";
+        }
+    }
+
+    private bool IsValidDouble(string value)
+    {
+        return double.TryParse(value, out _);
+    }
+
+    private bool IsValidInt(string value)
+    {
+        return int.TryParse(value, out _);
+    }
+
+    private double[,] GetValues()
+    {
+        var values = new double[valueInputRows.Count + 1, valueInputRows.Count];
+
+        for (int i = 0; i < valueInputRows.Count; i++)
+        {
+            for (int j = 0; j < valueInputRows.Count + 1; j++)
+                values[i, j] = Convert.ToDouble(valueInputRows[i][j].Value);
+        }
+
+        return values;
+    }
 }

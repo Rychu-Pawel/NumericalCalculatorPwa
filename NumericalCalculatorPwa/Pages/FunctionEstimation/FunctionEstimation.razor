@@ -1,12 +1,13 @@
 ﻿@page "/functionestimation"
 
+@using NumericalCalculatorPwa.Extensions;
 @using NumericalCalculatorPwa.Pages.FunctionEstimation.ViewModels;
 
 <h1>Function estimation</h1>
 
 <GeneralError ErrorMessage="@generalErrorMessage"></GeneralError>
 
-<div class="InterpolationAndApproximationPage mt-4" @onkeypress="HandlePageKeyPress">
+<div class="FunctionEstimationPage mt-4" @onkeypress="HandlePageKeyPress">
     <div class="form-inline form-row align-items-center">
         <label class="col-12 col-md-2 col-lg-12 col-xl-2 justify-content-start">Type:</label>
         <div class="col-12 col-sm-4 col-md-3 col-lg-4 col-xl-3">
@@ -59,7 +60,7 @@
 </div>
 
 @code {
-    List<FunctionEstimationViewModel> valueInputs = new List<FunctionEstimationViewModel> { new FunctionEstimationViewModel() };
+    List<FunctionEstimationViewModel> valueInputs = new List<FunctionEstimationViewModel>(1).Populate();
 
     string generalErrorMessage = string.Empty;
     bool isValidationEnabled = false;
