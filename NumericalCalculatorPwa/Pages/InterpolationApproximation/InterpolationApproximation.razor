@@ -6,10 +6,10 @@
 
 <GeneralError ErrorMessage="@generalErrorMessage"></GeneralError>
 
-<div class="InterpolationAndApproximationPage" @onkeypress="HandlePageKeyPress">
-    <div class="form-group row align-items-center">
-        <label class="col-12 col-md-4 col-lg-12 col-xl-4 col-form-label">Type</label>
-        <div class="col-6 col-md-4 col-lg-6 col-xl-4">
+<div class="InterpolationAndApproximationPage mt-4" @onkeypress="HandlePageKeyPress">
+    <div class="form-inline form-row align-items-center">
+        <label class="col-auto pr-3">Type:</label>
+        <div class="col-auto">
             <RadioButton Id="rbInterpolation"
                          Text="Interpolation"
                          GroupName="rbTypeGroup"
@@ -17,16 +17,23 @@
                          OnChangeCallback="(() => { computationType = ComputationType.Interpolation; })">
             </RadioButton>
         </div>
-        <div class="col-6 col-md-4 col-lg-6 col-xl-4">
-            <RadioButton Id="rbApproximation"
-                         Text="Approximation"
-                         GroupName="rbTypeGroup"
-                         OnChangeCallback="(() => { computationType = ComputationType.Approximation; })">
-            </RadioButton>
+        <div class="row col align-items-center">
+            <div class="col-auto pr-0">
+                <RadioButton Id="rbApproximation"
+                             Text="Approximation"
+                             GroupName="rbTypeGroup"
+                             OnChangeCallback="(() => { computationType = ComputationType.Approximation; })">
+                </RadioButton>
+            </div>
+            <div class="col row pl-0 align-items-center @(computationType == ComputationType.Approximation ? string.Empty : "d-none")">
+                <label class="col-auto pr-1">Level</label>
+                <div class="col pl-2">
+                    <InputWithValidation Model="level" Placeholder="Level" OnChangeCallback="Validate" Class="w-100"></InputWithValidation>
+                </div>
+            </div>
         </div>
-        <InputWithValidation Model="level" Placeholder="Level" OnChangeCallback="Validate"></InputWithValidation>
     </div>
-    <div class="form-group">
+    <div class="form-group mt-4 mb-2">
         @foreach (var item in valueInputs)
         {
             <div class="row mb-2">
@@ -132,7 +139,7 @@
         Validate();
 
         return valueInputs.All(pi => string.IsNullOrWhiteSpace(pi.X.ErrorMessage) && string.IsNullOrWhiteSpace(pi.Y.ErrorMessage))
-            && string.IsNullOrWhiteSpace(generalErrorMessage);
+            && string.IsNullOrWhiteSpace(generalErrorMessage) && string.IsNullOrWhiteSpace(level.ErrorMessage);
     }
 
     public void Validate()
@@ -141,6 +148,10 @@
             return;
 
         generalErrorMessage = string.Empty;
+        level.ErrorMessage = string.Empty;
+
+        if (computationType == ComputationType.Approximation && !IsValidInt(level.Value))
+            level.ErrorMessage = "Invalid value";
 
         if (valueInputs.Count == 1)
             ValidateRow(valueInputs[0]);
@@ -164,6 +175,11 @@
     private bool IsValidDouble(string value)
     {
         return double.TryParse(value, out _);
+    }
+
+    private bool IsValidInt(string value)
+    {
+        return int.TryParse(value, out _);
     }
 
     private List<Rychusoft.NumericalLibraries.Common.PointD> GetValues()
