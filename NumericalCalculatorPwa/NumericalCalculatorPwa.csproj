@@ -33,7 +33,9 @@
     <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="wwwroot\css\bootstrap\" />
     <Folder Include="wwwroot\css\fonts\" />
+    <Folder Include="wwwroot\css\open-iconic\" />
     <Folder Include="wwwroot\scripts\" />
   </ItemGroup>
   <ItemGroup>
