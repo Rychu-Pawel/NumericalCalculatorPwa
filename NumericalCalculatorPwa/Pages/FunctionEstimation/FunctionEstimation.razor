@@ -1,8 +1,8 @@
-﻿@page "/interpolationapproximation"
+﻿@page "/functionestimation"
 
-@using NumericalCalculatorPwa.Pages.InterpolationApproximation.ViewModels;
+@using NumericalCalculatorPwa.Pages.FunctionEstimation.ViewModels;
 
-<h1>Interpolation and approximation</h1>
+<h1>Function estimation</h1>
 
 <GeneralError ErrorMessage="@generalErrorMessage"></GeneralError>
 
@@ -63,7 +63,7 @@
 </div>
 
 @code {
-    List<InterpolationApproximationViewModel> valueInputs = new List<InterpolationApproximationViewModel> { new InterpolationApproximationViewModel() };
+    List<FunctionEstimationViewModel> valueInputs = new List<FunctionEstimationViewModel> { new FunctionEstimationViewModel() };
 
     string generalErrorMessage = string.Empty;
     bool isValidationEnabled = false;
@@ -111,12 +111,12 @@
         }
     }
 
-    public bool IsLastRow(InterpolationApproximationViewModel row)
+    public bool IsLastRow(FunctionEstimationViewModel row)
     {
         return row == valueInputs.Last();
     }
 
-    public void RemoveRow(InterpolationApproximationViewModel row)
+    public void RemoveRow(FunctionEstimationViewModel row)
     {
         valueInputs.Remove(row);
     }
@@ -126,10 +126,10 @@
         var lastRow = valueInputs.Last();
 
         if (!IsRowEmpty(lastRow))
-            valueInputs.Add(new InterpolationApproximationViewModel());
+            valueInputs.Add(new FunctionEstimationViewModel());
     }
 
-    private bool IsRowEmpty(InterpolationApproximationViewModel row)
+    private bool IsRowEmpty(FunctionEstimationViewModel row)
     {
         return string.IsNullOrEmpty(row.X.Value) && string.IsNullOrEmpty(row.Y.Value);
     }
@@ -160,7 +160,7 @@
             ValidateRow(valueInputs[i]);
     }
 
-    private void ValidateRow(InterpolationApproximationViewModel row)
+    private void ValidateRow(FunctionEstimationViewModel row)
     {
         row.X.ErrorMessage = string.Empty;
         row.Y.ErrorMessage = string.Empty;

@@ -8,7 +8,7 @@
 
 <div class="MeanPage" @onkeypress="HandlePageKeyPress">
     <div class="form-group row align-items-center">
-        <label class="col-12 col-md-4 col-lg-12 col-xl-4 col-form-label">Mean type</label>
+        <label class="col-12 col-md-4 col-lg-12 col-xl-4 col-form-label">Type:</label>
         <div class="col-6 col-md-4 col-lg-6 col-xl-4">
             <RadioButton Id="rbArithmetic"
                          Text="Arithmetic"
@@ -25,7 +25,7 @@
             </RadioButton>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group mt-4 mb-2">
         @foreach (var item in valueInputs)
         {
             <div class="row mb-2">
