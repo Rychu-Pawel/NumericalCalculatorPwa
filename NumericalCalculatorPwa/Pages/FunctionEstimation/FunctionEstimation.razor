@@ -8,8 +8,8 @@
 
 <div class="InterpolationAndApproximationPage mt-4" @onkeypress="HandlePageKeyPress">
     <div class="form-inline form-row align-items-center">
-        <label class="col-auto pr-3">Type:</label>
-        <div class="col-auto">
+        <label class="col-12 col-md-2 col-lg-12 col-xl-2 justify-content-start">Type:</label>
+        <div class="col-12 col-sm-4 col-md-3 col-lg-4 col-xl-3">
             <RadioButton Id="rbInterpolation"
                          Text="Interpolation"
                          GroupName="rbTypeGroup"
@@ -17,20 +17,16 @@
                          OnChangeCallback="(() => { computationType = ComputationType.Interpolation; })">
             </RadioButton>
         </div>
-        <div class="row col align-items-center">
-            <div class="col-auto pr-0">
-                <RadioButton Id="rbApproximation"
-                             Text="Approximation"
-                             GroupName="rbTypeGroup"
-                             OnChangeCallback="(() => { computationType = ComputationType.Approximation; })">
-                </RadioButton>
-            </div>
-            <div class="col row pl-0 align-items-center @(computationType == ComputationType.Approximation ? string.Empty : "d-none")">
-                <label class="col-auto pr-1">Level</label>
-                <div class="col pl-2">
-                    <InputWithValidation Model="level" Placeholder="Level" OnChangeCallback="Validate" Class="w-100"></InputWithValidation>
-                </div>
-            </div>
+        <div class="col-auto">
+            <RadioButton Id="rbApproximation"
+                         Text="Approximation"
+                         GroupName="rbTypeGroup"
+                         OnChangeCallback="(() => { computationType = ComputationType.Approximation; })">
+            </RadioButton>
+        </div>
+        <label class="col-auto justify-content-end @(computationType == ComputationType.Approximation ? string.Empty : "d-none")">Level</label>
+        <div class="col-2 @(computationType == ComputationType.Approximation ? string.Empty : "d-none")">
+            <InputWithValidation Model="level" Placeholder="Level" OnChangeCallback="Validate" Class="w-100"></InputWithValidation>
         </div>
     </div>
     <div class="form-group mt-4 mb-2">
