@@ -4,10 +4,10 @@ namespace NumericalCalculatorPwa.Extensions
 {
     public static class ListExtensions
     {
-        public static List<T> Populate<T>(this List<T> list) where T : new()
+        public static List<T> Populate<T>(this List<T> list, int count) where T : new()
         {
-            for (int i = 0; i < list.Count; i++)
-                list[i] = new T();
+            for (int i = 0; i < count; i++)
+                list.Add(new T());
 
             return list;
         }

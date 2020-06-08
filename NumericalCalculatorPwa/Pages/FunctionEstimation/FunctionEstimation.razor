@@ -60,7 +60,7 @@
 </div>
 
 @code {
-    List<FunctionEstimationViewModel> valueInputs = new List<FunctionEstimationViewModel>(1).Populate();
+    List<FunctionEstimationViewModel> valueInputs = new List<FunctionEstimationViewModel>().Populate(1);
 
     string generalErrorMessage = string.Empty;
     bool isValidationEnabled = false;

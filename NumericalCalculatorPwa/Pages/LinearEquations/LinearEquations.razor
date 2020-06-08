@@ -33,15 +33,23 @@
                         </td>
                     }
                     <td>=</td>
-                    <td>valueInputRows[i][valueInputRows.Count]</td>
+                    <td>
+                        <InputWithValidation Model="valueInputRows[i][valueInputRows.Count]" OnChangeCallback="Validate"></InputWithValidation>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
     <div class="form-row">
         <div class="form-group col-8 col-sm-9 col-lg-8">
-            <label for="txtResult">Result:</label>
-            <input id="txtResult" type="text" class="form-control" @bind="results">
+            <label for="txtResult">Results:</label>
+            @for (int i = 0; i < results.Count; i++)
+            {
+                <div class="form-group">
+                    <label>x@(i) =</label>
+                    <input id="txtResult" type="text" class="form-control" @bind="results[i]">
+                </div>
+            }
         </div>
         <div class="form-group col-4 col-sm-3 col-lg-4 d-flex align-items-end justify-content-end">
             <button class="btn btn-primary" @onclick="Calculate">Calculate</button>
@@ -53,16 +61,16 @@
     static int initialVariablesCount = 2;
 
     List<List<ValueErrorModel>> valueInputRows = new List<List<ValueErrorModel>>
-    {
-        new List<ValueErrorModel>(initialVariablesCount + 1).Populate(),
-        new List<ValueErrorModel>(initialVariablesCount + 1).Populate()
+{
+        new List<ValueErrorModel>().Populate(initialVariablesCount + 1),
+        new List<ValueErrorModel>().Populate(initialVariablesCount + 1)
     };
 
     string generalErrorMessage = string.Empty;
     bool isValidationEnabled = false;
 
     ValueErrorModel variablesCount = new ValueErrorModel() { Value = initialVariablesCount.ToString() };
-    List<double> results = new List<double>(initialVariablesCount);
+    List<string> results = new List<string>();
 
     public void HandlePageKeyPress(KeyboardEventArgs eventArgs)
     {
@@ -82,7 +90,9 @@
             var values = GetValues();
 
             var linearEquations = new Rychusoft.NumericalLibraries.LinearEquation.LinearEquation(values);
-            results = linearEquations.Compute().ToList();
+            var results = linearEquations.Compute();
+
+            this.results = results.Select(r => r.ToString()).ToList();
 
             isValidationEnabled = false;
         }
@@ -149,7 +159,7 @@
 
     private double[,] GetValues()
     {
-        var values = new double[valueInputRows.Count + 1, valueInputRows.Count];
+        var values = new double[valueInputRows.Count, valueInputRows.Count + 1];
 
         for (int i = 0; i < valueInputRows.Count; i++)
         {
