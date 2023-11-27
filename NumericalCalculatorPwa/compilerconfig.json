@@ -8,11 +8,11 @@
     "inputFile": "wwwroot/css/site.scss"
   },
   {
-    "outputFile": "wwwroot/css/scss_output/GeneralError.razor.css",
+    "outputFile": "wwwroot/css/scss_output/GeneralErrorRazor.css",
     "inputFile": "Shared/Components/GeneralError.razor.scss"
   },
   {
-    "outputFile": "wwwroot/css/scss_output/InfoBar.razor.css",
+    "outputFile": "wwwroot/css/scss_output/InfoBarRazor.css",
     "inputFile": "Shared/Components/InfoBar.razor.scss"
   }
 ]
