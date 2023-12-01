@@ -2,5 +2,83 @@
 
 <h1>Calculator</h1>
 
+<GeneralError ErrorMessage="@generalErrorMessage"></GeneralError>
+
+<div class="calculatorPage" @onkeypress="HandleCalculatorPageKeyPress">
+    <div class="form-group">
+        <div class="form-row">
+            <InputWithValidation Model="mainInput" OnChangeCallback="Validate" Placeholder="Formula"></InputWithValidation>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <label for="calculatorResult">Result:</label>
+            <input id="calculatorResult" type="text" class="form-control" @bind="result">
+        </div>
+        <div class="form-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2 d-flex align-items-end justify-content-end">
+            <button class="btn btn-primary" @onclick="Calculate">Calculate</button>
+        </div>
+    </div>
+</div>
+
 @code {
+    ValueErrorModel mainInput = new ValueErrorModel();
+
+    string generalErrorMessage = string.Empty;
+    bool isValidationEnabled = false;
+    double result = 0;
+
+    public void HandleCalculatorPageKeyPress(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")
+            Calculate();
+    }
+
+    public void Calculate()
+    {
+        try
+        {
+            isValidationEnabled = true;
+
+            if (!IsModelValid())
+                return;
+
+            var formula = GetFormula();
+
+            var calculator = new Rychusoft.NumericalLibraries.Calculator.Calculator(formula);
+            result = calculator.Compute();
+
+            isValidationEnabled = false;
+        }
+        catch (Exception ex)
+        {
+            generalErrorMessage = ex.Message;
+        }
+    }
+
+    public bool IsModelValid()
+    {
+        Validate();
+
+        return string.IsNullOrWhiteSpace(mainInput.ErrorMessage)
+            && string.IsNullOrWhiteSpace(generalErrorMessage);
+    }
+
+    public void Validate()
+    {
+        if (!isValidationEnabled)
+            return;
+
+        generalErrorMessage = string.Empty;
+
+        mainInput.ErrorMessage = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(mainInput.Value))
+            mainInput.ErrorMessage = "Formula is required";
+    }
+
+    private string GetFormula()
+    {
+        return mainInput.Value;
+    }
 }
