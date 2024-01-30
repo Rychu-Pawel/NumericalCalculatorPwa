@@ -1,18 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<RazorLangVersion>3.0</RazorLangVersion>
 		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
 	</PropertyGroup>
 	<ItemGroup>
-		<Content Remove="compilerconfig.json" />
+	  <Compile Remove="wwwroot\scripts\**" />
+	  <Content Remove="wwwroot\scripts\**" />
+	  <EmbeddedResource Remove="wwwroot\scripts\**" />
+	  <None Remove="wwwroot\scripts\**" />
 	</ItemGroup>
 	<ItemGroup>
-		<_ContentIncludedByDefault Remove="wwwroot\css\bundle.css" />
-		<_ContentIncludedByDefault Remove="wwwroot\css\scss_output\site.css" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="BuildWebCompiler2022" Version="1.14.10" />
 		<PackageReference Include="Rychusoft.NumericalLibraries.Calculator" Version="1.1.1" />
 		<PackageReference Include="Rychusoft.NumericalLibraries.Interpolation" Version="1.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
@@ -31,9 +29,5 @@
 		<Folder Include="wwwroot\css\bootstrap\" />
 		<Folder Include="wwwroot\css\fonts\" />
 		<Folder Include="wwwroot\css\open-iconic\" />
-		<Folder Include="wwwroot\scripts\" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="compilerconfig.json" />
 	</ItemGroup>
 </Project>
