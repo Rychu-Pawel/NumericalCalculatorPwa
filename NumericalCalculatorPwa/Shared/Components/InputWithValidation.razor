@@ -1,10 +1,11 @@
-﻿<input type="@Type" 
-       inputmode="decimal" 
-       class="form-control @(Class) @(string.IsNullOrWhiteSpace(Model.ErrorMessage) ? "" : "is-invalid")" 
-       placeholder="@Placeholder" 
-       @bind="Model.Value" 
-       @bind:event="oninput" 
-       @onchange="OnChangeCallback" 
+﻿<input @ref="input"
+       type="@Type"
+       class="form-control @(Class) @(string.IsNullOrWhiteSpace(Model.ErrorMessage) ? "" : "is-invalid")"
+       placeholder="@Placeholder"
+       autofocus="@Autofocus"
+       @bind="Model.Value"
+       @bind:event="oninput"
+       @onchange="OnChangeCallback"
        @onkeyup="OnKeyUpCallback">
 
 @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
@@ -15,6 +16,8 @@
 }
 
 @code {
+    private ElementReference input;
+
     [Parameter]
     public ValueErrorModel Model { get; set; }
 
@@ -32,4 +35,13 @@
 
     [Parameter]
     public EventCallback OnKeyUpCallback { get; set; }
+
+    [Parameter]
+    public bool Autofocus { get; set; } = false;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && Autofocus)
+            input.FocusAsync();
+    }
 }

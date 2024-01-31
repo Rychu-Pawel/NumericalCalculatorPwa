@@ -30,7 +30,7 @@
         {
             <div class="row mb-2">
                 <div class="form-group col">
-                    <InputWithValidation Model="item.Value" Placeholder="Value" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
+                    <InputWithValidation Model="item.Value" Placeholder="Value" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount" Autofocus="true"></InputWithValidation>
                 </div>
                 <div class="form-group col @(computationType == ComputationType.Weighted ? string.Empty : "d-none")">
                     <InputWithValidation Model="item.Weight" Placeholder="Weight" OnChangeCallback="Validate" OnKeyUpCallback="ManageRowsCount"></InputWithValidation>
