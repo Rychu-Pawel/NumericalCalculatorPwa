@@ -13,6 +13,9 @@
 .modal-content {
     background-color: white;
     padding: 20px;
-    margin: 200px;
+    margin: 20px;
     border-radius: 5px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
 }
