@@ -5,10 +5,20 @@
 		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="wwwroot\css\bootstrap\**" />
+	  <Compile Remove="wwwroot\css\open-iconic\**" />
 	  <Compile Remove="wwwroot\scripts\**" />
+	  <Content Remove="wwwroot\css\bootstrap\**" />
+	  <Content Remove="wwwroot\css\open-iconic\**" />
 	  <Content Remove="wwwroot\scripts\**" />
+	  <EmbeddedResource Remove="wwwroot\css\bootstrap\**" />
+	  <EmbeddedResource Remove="wwwroot\css\open-iconic\**" />
 	  <EmbeddedResource Remove="wwwroot\scripts\**" />
+	  <None Remove="wwwroot\css\bootstrap\**" />
+	  <None Remove="wwwroot\css\open-iconic\**" />
 	  <None Remove="wwwroot\scripts\**" />
+	  <TypeScriptCompile Remove="wwwroot\css\bootstrap\**" />
+	  <TypeScriptCompile Remove="wwwroot\css\open-iconic\**" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Remove="wwwroot\site.ts" />
@@ -33,9 +43,7 @@
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="wwwroot\css\bootstrap\" />
 		<Folder Include="wwwroot\css\fonts\" />
-		<Folder Include="wwwroot\css\open-iconic\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <TypeScriptCompile Include="wwwroot\site.ts" />

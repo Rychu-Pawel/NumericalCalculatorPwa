@@ -4,12 +4,12 @@
   "libraries": [
     {
       "library": "twitter-bootstrap@4.5.0",
-      "destination": "wwwroot/css/bootstrap/",
+      "destination": "wwwroot/lib/bootstrap/",
       "files": [ "css/bootstrap.min.css" ]
     },
     {
       "library": "open-iconic@1.1.1",
-      "destination": "wwwroot/css/open-iconic/",
+      "destination": "wwwroot/lib/open-iconic/",
       "files": [
         "font/css/open-iconic-bootstrap.min.css",
         "font/fonts/open-iconic.eot",

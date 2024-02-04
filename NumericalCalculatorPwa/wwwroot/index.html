@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Numerical Calculator</title>
     <base href="/" />
-    <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/open-iconic/font/css/open-iconic-bootstrap.min.css" rel="stylesheet" />
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="lib/open-iconic/font/css/open-iconic-bootstrap.min.css" rel="stylesheet" />
     <link href="css/fonts/fonts.css" rel="stylesheet" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="NumericalCalculatorPwa.styles.css" rel="stylesheet">
@@ -69,11 +69,17 @@
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 
     <script>
-        var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        handleStandaloneMode();
 
-        if (isStandalone) {
-            document.getElementById("body").classList.add("standalone-mode");
-            document.getElementById("main").classList.remove("container");
+        window.onresize(() => handleStandaloneMode());
+
+        function handleStandaloneMode() {
+            var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+            if (isStandalone) {
+                document.getElementById("body").classList.add("standalone-mode");
+                document.getElementById("main").classList.remove("container");
+            }
         }
     </script>
     <script>
