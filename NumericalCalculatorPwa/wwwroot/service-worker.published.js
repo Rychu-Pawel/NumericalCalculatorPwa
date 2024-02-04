@@ -42,6 +42,15 @@ async function onFetch(event) {
         const request = shouldServeIndexHtml ? 'index.html' : event.request;
         const cache = await caches.open(cacheName);
         cachedResponse = await cache.match(request);
+
+        if (cachedResponse) {
+            // This is the part where we fetch the update in the background and update the cache.
+            // It doesn't delay the response to the user.
+            event.waitUntil((async () => {
+                const response = await fetch(request);
+                cache.put(request, response);
+            })());
+        }
     }
 
     return cachedResponse || fetch(event.request);
