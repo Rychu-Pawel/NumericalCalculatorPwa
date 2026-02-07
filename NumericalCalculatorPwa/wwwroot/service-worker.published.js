@@ -18,7 +18,12 @@ async function onInstall(event) {
     const assetsRequests = self.assetsManifest.assets
         .filter(asset => offlineAssetsInclude.some(pattern => pattern.test(asset.url)))
         .filter(asset => !offlineAssetsExclude.some(pattern => pattern.test(asset.url)))
-        .map(asset => new Request(asset.url, { integrity: asset.hash }));
+        .map(asset => {
+            // Some CDNs/security layers may inject dynamic content into HTML, which breaks SRI checks.
+            // Keep integrity checks for static binaries/scripts/styles, but skip them for HTML shell files.
+            const shouldUseIntegrity = !asset.url.endsWith('.html');
+            return shouldUseIntegrity ? new Request(asset.url, { integrity: asset.hash }) : new Request(asset.url);
+        });
     await caches.open(cacheName).then(cache => cache.addAll(assetsRequests));
 }
 
